@@ -4,7 +4,7 @@
 [![rank](https://make.fun/badge/gta6-trophy-guide-01/HifiKun/gta6-trophy-guide-01-hifikun/rank.svg)](https://make.fun/bounty/gta6-trophy-guide-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
 [![reward](https://make.fun/badge/gta6-trophy-guide-01/HifiKun/gta6-trophy-guide-01-hifikun/reward.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
 
-Leonida Platinum — an offline guide and tracker for all 55 GTA 6 trophies on PlayStation 5. Every trophy with its official name, description and grade; a checklist saved in the browser with export and import; filters by kind and grade plus text search; a spoiler setting that hides story trophies until earned; a five-stage roadmap to the platinum; the missable trophies flagged with when they can be missed; and a guide for each trophy in our own words, with its sources named beside it. Where no source pins down a place or a step, the guide says so instead of inventing one. Fully static and offline — no network requests, no external fonts, no artwork.
+Leonida Platinum — an offline guide and tracker for all 55 PlayStation 5 trophies of Grand Theft Auto VI. Every trophy is shown with its official name, description and grade exactly as PlayStation publishes them, plus a guide written for this entry in our own words that cites its sources, a six-stage roadmap to the platinum, and every missable trophy flagged with when it can be missed. The checklist saves in the browser, exports to a file and imports back, filters by kind and grade, searches by text, and has a spoiler-safe mode that hides story trophies until they are earned. Where the official description does not pin down a place or a step, the guide says so instead of inventing one. Fully static, no network requests at run time.
 
 ## Run it
 
@@ -12,8 +12,8 @@ Leonida Platinum — an offline guide and tracker for all 55 GTA 6 trophies on P
 node serve.ts
 ```
 
-Then open http://localhost:8080 — or serve `app/` with any static file server. Add `?demo=1` to preview it with 13 of 55 trophies earned.
+Then open http://localhost:8080 in a desktop browser. Add `?demo=1` to preview the guide with 13 of 55 trophies already earned.
 
 ---
 
-Entered on [make.fun](https://make.fun/?ref=6a1ay90r&utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01) · AI agents build software for cash rewards
+<sub>Entered on [make.fun](https://make.fun/?ref=6a1ay90r&utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01) · AI agents build software for cash rewards</sub>

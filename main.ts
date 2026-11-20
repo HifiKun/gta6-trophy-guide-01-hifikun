@@ -1,39 +1,61 @@
-// Leonida Platinum: a GTA 6 trophy guide and tracker for make.fun's
-// gta6-trophy-guide-01 bounty (Node 22, standard library only).
+// Leonida Platinum — the hand-in program for the gta6-trophy-guide-01 entry.
 //
-// The guide itself is plain static files in app/ (index.html, its ES modules,
-// its stylesheet and data/trophies.json), built to open in desktop Chrome and
-// work with the network off: every file it loads lives under app/.
-// This program hands it in: it copies app/ and screenshots/ from beside this
-// file into /output (or MAKEFUN_OUTPUT_DIR outside the grader) and writes
-// /output/dossier.json with the vendored make.fun library, the summary the
-// judge reads. vendor/makefun-frontend.ts is the kit's copy, unchanged: the
-// scorer requires dossier.json to be byte for byte what its own copy writes.
+// What it does, in three steps:
+//   1. Copies the guide (app/) and its screenshots (screenshots/) from this
+//      repository into the output directory.
+//   2. Asks the kit's library, vendor/makefun-frontend.ts, to build the
+//      dossier from those copied files and writes it as dossier.json.
+//   3. Writes nothing else, so two runs of this program produce the same
+//      bytes: the copy is a plain recursive copy and the dossier is built
+//      from the copied files alone.
 //
-// Run it: mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+// The output directory is /output, or $MAKEFUN_OUTPUT_DIR when that is set
+// (the local way to run it is: mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts).
+// Node 22 runs this file as-is; only the standard library is used, plus the
+// kit's own buildDossier, which reads files and never touches the network.
 import { buildDossier } from './vendor/makefun-frontend.ts';
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const repoRoot = fileURLToPath(new URL('.', import.meta.url));
-const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+// The repository root: the directory this file lives in.
+const repoRoot = dirname(fileURLToPath(import.meta.url));
 
-// Copy the guide (app/) and its screenshots into the output directory.
-mkdirSync(outputDir, { recursive: true });
-cpSync(join(repoRoot, 'app'), join(outputDir, 'app'), { recursive: true });
-mkdirSync(join(outputDir, 'screenshots'), { recursive: true });
-if (existsSync(join(repoRoot, 'screenshots'))) {
-  cpSync(join(repoRoot, 'screenshots'), join(outputDir, 'screenshots'), { recursive: true });
+// Where the entry is handed in. /output in the grader, or the caller's
+// directory when MAKEFUN_OUTPUT_DIR is set for a local run.
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR || '/output';
+
+// The caps the competition's gate holds the entry to: the dossier text is
+// capped at 160 KiB, at most 4 screenshots of at most 256 KiB each, app/ at
+// most 993 files and directories and 48 MiB, paths at most 1,000 bytes.
+const dossierCaps = {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 256 * 1024 },
+  app_max_files: 993,
+  app_max_bytes: 48 * 1024 * 1024,
+  app_path_max_bytes: 1000,
+};
+
+function copyTree(name: string): void {
+  const from = join(repoRoot, name);
+  const to = join(outputDir, name);
+  if (!existsSync(from)) return;
+  cpSync(from, to, { recursive: true });
 }
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the
-// bytes; the others refuse an entry the scorer would refuse (more than 4
-// screenshots or one over 256 KiB; more than 993 files and directories in
-// app/ or 48 MiB of app files: app/ counts beside /output's own 1000-entry
-// cap, its screenshots/ and dossier.json).
-writeFileSync(
-  join(outputDir, 'dossier.json'),
-  buildDossier(outputDir, { text_max_bytes: 163840, screenshots: { max: 4, max_bytes: 262144 }, app_max_files: 993, app_max_bytes: 50331648 }),
-);
+function main(): void {
+  // Start clean: remove any previous hand-in so stale files cannot linger.
+  rmSync(outputDir, { recursive: true, force: true });
+  mkdirSync(outputDir, { recursive: true });
+
+  // The guide itself, then its screenshots.
+  copyTree('app');
+  copyTree('screenshots');
+
+  // The dossier is built from the copied files, so it always describes
+  // exactly what was handed in — and the same input gives the same bytes.
+  const dossier = buildDossier(outputDir, dossierCaps);
+  writeFileSync(join(outputDir, 'dossier.json'), dossier);
+}
+
+main();
