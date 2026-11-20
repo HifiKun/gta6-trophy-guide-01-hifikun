@@ -14,7 +14,7 @@
 // Node 22 runs this file as-is; only the standard library is used, plus the
 // kit's own buildDossier, which reads files and never touches the network.
 import { buildDossier } from './vendor/makefun-frontend.ts';
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -45,8 +45,13 @@ function copyTree(name: string): void {
 
 function main(): void {
   // Start clean: remove any previous hand-in so stale files cannot linger.
-  rmSync(outputDir, { recursive: true, force: true });
+  // Only the CONTENTS of the output directory are removed, never the
+  // directory itself: in the grader /output is a pre-created mount point,
+  // and removing the directory itself fails (EBUSY) and aborts the run.
   mkdirSync(outputDir, { recursive: true });
+  for (const entry of readdirSync(outputDir)) {
+    rmSync(join(outputDir, entry), { recursive: true, force: true });
+  }
 
   // The guide itself, then its screenshots.
   copyTree('app');
