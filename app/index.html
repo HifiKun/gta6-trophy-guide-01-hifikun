@@ -3,23 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GTA VI trophy checklist</title>
-<link rel="stylesheet" href="style.css">
+<title>Leonida Platinum — GTA 6 Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 GTA 6 trophies on PlayStation 5: checklist, roadmap to the platinum, missable flags and a cited guide for every trophy.">
+<link rel="stylesheet" href="css/base.css">
 </head>
 <body>
-<header>
-  <h1>GTA VI trophy checklist</h1>
-  <p id="progress">0 of 55 earned</p>
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; 55 trophies</p>
+    <h1>Leonida Platinum</h1>
+    <p class="subtitle">An offline trophy guide and tracker. Every official name, description and grade, a roadmap to the platinum, the missables flagged, and a guide for each trophy in our own words — with its sources beside it. No network needed; progress stays in this browser.</p>
+    <div class="progress-strip" id="progress-strip" aria-live="polite">
+      <div class="big-count"><span id="earned-count">0</span><span class="of">/ 55 earned</span></div>
+      <div class="count-bars" id="count-bars"></div>
+    </div>
+  </div>
 </header>
-<div class="controls">
-  <label>Grade <select id="grade"><option value="all">All</option><option value="platinum">Platinum</option><option value="gold">Gold</option><option value="silver">Silver</option><option value="bronze">Bronze</option></select></label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json"></label>
-</div>
-<table>
-  <thead><tr><th>Earned</th><th>Trophy</th><th>Grade</th><th>How to get it</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
-<script type="module" src="app.js"></script>
+
+<nav class="tabs" aria-label="Guide sections">
+  <a href="#checklist" id="tab-checklist" class="tab">Checklist</a>
+  <a href="#roadmap" id="tab-roadmap" class="tab">Roadmap</a>
+  <a href="#missables" id="tab-missables" class="tab">Missables</a>
+</nav>
+
+<main id="view" class="view"></main>
+
+<footer class="colophon">
+  <p>Names and descriptions are shown exactly as PlayStation publishes them (official list, via Exophase and PSNProfiles). Guides are our own words, written for this guide, and each one names its sources. Where no source pins down a place or a step, the guide says so instead of inventing one. Nothing here has been checked in-game — the game released 19 November 2026.</p>
+  <p>Demo mode: open with <code>?demo=1</code> to preview the tracker with 13 of 55 trophies earned. Your real progress is only ever stored in this browser (localStorage) and can be exported and imported below.</p>
+</footer>
+
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
